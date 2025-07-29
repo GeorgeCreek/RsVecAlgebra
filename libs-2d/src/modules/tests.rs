@@ -1,7 +1,11 @@
-///pub mod modules;
+mod vector2d_tests;
+mod point2d_tests;
+
 use vector2d::Vector2d;
 /// use num_traits::{Float, Signed};
 ///use::num_traits::identities::Zero;
+
+
 #[test]
 fn creates_vector_with_given_components() {
     let vector = Vector2d::new(3.0, 4.0);

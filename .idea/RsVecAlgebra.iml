@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/libs-2d/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/libs-2d/src/modules/vector2d/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/libs-2d/src/modules/point2d/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/main-vector2d/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/libs-2d/src/modules/vector2d/target" />
       <excludeFolder url="file://$MODULE_DIR$/libs-2d/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />

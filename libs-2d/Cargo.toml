@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 # arc2d =  { path = "../libs-2d/src/modules/arc2d" }
-# point2d = { path = "../libs-2d/src/modules/point2d" }
+point2d = { path = "../libs-2d/src/modules/point2d" }
 # line2d = { path = "../libs-2d/src/modules/line2d" }
 vector2d = { path = "../libs-2d/src/modules/vector2d" }
 num-traits = "0.2.19"

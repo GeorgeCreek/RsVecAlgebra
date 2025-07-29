@@ -4,6 +4,7 @@ pub use vector2d::Vector2d;
 mod tests {
     use super::*;
     use num_traits::identities::Zero;
+    use std::ops::{Add, Mul};
 
     #[test]
     fn creates_vector_with_positive_components() {
@@ -35,8 +36,26 @@ mod tests {
 
     #[test]
     fn creates_null_vector_with_custom_zero_trait() {
-        #[derive(Copy, Clone, PartialEq, Debug)]
+        #[derive(Copy, Clone, PartialEq, PartialOrd, Debug)] // Added PartialOrd
         struct CustomZeroType(i32);
+
+        // Implement Add trait for CustomZeroType
+        impl Add for CustomZeroType {
+            type Output = Self;
+
+            fn add(self, other: Self) -> Self::Output {
+                CustomZeroType(self.0 + other.0)
+            }
+        }
+
+        // Implement Mul trait for CustomZeroType
+        impl Mul for CustomZeroType {
+            type Output = Self;
+
+            fn mul(self, other: Self) -> Self::Output {
+                CustomZeroType(self.0 * other.0)
+            }
+        }
 
         impl Zero for CustomZeroType {
             fn zero() -> Self { CustomZeroType(0) }
@@ -47,6 +66,8 @@ mod tests {
         assert_eq!(vector.x, CustomZeroType(0));
         assert_eq!(vector.y, CustomZeroType(0));
     }
+
+
 
     #[test]
     fn creates_vector_with_large_positive_components() {

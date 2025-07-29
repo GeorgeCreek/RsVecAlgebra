@@ -1,4 +1,8 @@
+use std::hash::Hash;
+use std::hash::Hasher;
+use std::cmp::Ordering;
 use std::ops::{Add, Sub, Mul, Div, Neg };
+use std::ops::{AddAssign, SubAssign, MulAssign, DivAssign};
 use std::cmp::PartialOrd;
 
 use num_traits::{Float, NumCast, Signed};
@@ -6,6 +10,7 @@ use::num_traits::identities::Zero;
 ///use num_traits::real::Real;
 ///use std::io::{self, Read};
 #[derive(Clone)]
+#[derive(PartialEq)]
 pub struct Vector2d<T> { //<T: Float> {
     pub x: T,
     pub y: T,
@@ -79,14 +84,7 @@ impl<T: Copy> Copy for Vector2d<T> {
     // This trait is empty, as Copy does not require any methods.
     // It simply indicates that the type can be copied without moving.
 }
-impl<T: Clone> Clone for Vector2d<T> {
-    fn clone(&self) -> Self {
-        Self {
-            x: self.x.clone(),
-            y: self.y.clone(),
-        }
-    }
-}
+
 impl<T: Copy + Clone + Zero + std::ops::Mul + PartialOrd> Vector2d<T> {
     // ... other methods remain the same ...
 
@@ -311,6 +309,15 @@ where T: Add<T, Output=O> + Copy + Clone,
         }
     }
 }
+impl<T> AddAssign for Vector2d<T>
+where T: AddAssign,
+{
+    fn add_assign(&mut self, other: Self) {
+        self.x += other.x;
+        self.y += other.y;
+    }
+}
+
 impl<T, O> Sub<Vector2d<T>> for Vector2d<T>
 where T: Sub<T, Output=O> + Copy + Clone,
 {
@@ -320,6 +327,14 @@ where T: Sub<T, Output=O> + Copy + Clone,
             x: self.x - rhs.x,
             y: self.y - rhs.y,
         }
+    }
+}
+impl<T> SubAssign for Vector2d<T>
+where T: SubAssign,
+{
+    fn sub_assign(&mut self, other: Self) {
+        self.x -= other.x;
+        self.y -= other.y;
     }
 }
 impl<T, O> Mul<Vector2d<T>> for Vector2d<T>
@@ -333,6 +348,14 @@ where T: Mul<T, Output=O> + Copy + Clone,
         }
     }
 }
+impl<T> MulAssign for Vector2d<T>
+where T: MulAssign,
+{
+    fn mul_assign(&mut self, other: Self) {
+        self.x *= other.x;
+        self.y *= other.y;
+    }
+}
 impl<T, O> Div<Vector2d<T>> for Vector2d<T>
 where T: Div<T, Output=O> + Copy + Clone,
 {
@@ -342,6 +365,14 @@ where T: Div<T, Output=O> + Copy + Clone,
             x: self.x / rhs.x,
             y: self.y / rhs.y,
         }
+    }
+}
+impl<T> DivAssign for Vector2d<T>
+where T: DivAssign,
+{
+    fn div_assign(&mut self, other: Self) {
+        self.x /= other.x;
+        self.y /= other.y;
     }
 }
 
@@ -397,8 +428,7 @@ impl<T: Float + Signed> Vector2d<T> {
         (self.x * self.x + self.y * self.y).sqrt()
     }
     pub fn length_squared(&self) -> T
-    where
-        <T as Mul>::Output: Add
+    where <T as Mul>::Output: Add
     {
         self.x * self.x + self.y * self.y
     }
@@ -427,6 +457,17 @@ impl<T: Float + Signed> Vector2d<T> {
     }
     pub fn cross(&self, other: &Self) -> T {
         self.x * other.y - self.y * other.x
+    }
+    pub fn unit_vector(&self) -> Self {
+        let len = self.length();
+        if len.is_zero() {
+            Self::null()
+        } else {
+            Self {
+                x: self.x / len,
+                y: self.y / len,
+            }
+        }
     }
     pub fn distance_to(&self, other: &Self) -> T {
         let dx = self.x - other.x;
@@ -798,13 +839,12 @@ impl<T: std::fmt::Debug> std::fmt::Debug for Vector2d<T> {
             .finish()
     }
 }
-/*
+
 /// Trait for converting a Vector2d of any numeric type to a Vector2d of a float type.
 pub trait ToFloatVector2d<F: Float> {
     /// Converts the vector to a Vector2d with float components.
     fn to_float(&self) -> Vector2d<F>;
 }
-*/
 
 impl<T: NumCast + Copy, F: Float> ToFloatVector2d<F> for Vector2d<T> {
     fn to_float(&self) -> Vector2d<F> {
@@ -830,7 +870,9 @@ impl<T: NumCast + Copy, F: Float> ToFloatVector2d<F> for &mut Vector2d<T> {
         }
     }
 }
-impl<T: PartialEq> Eq for Vector2d<T> {}
+impl<T: PartialEq> Eq for Vector2d<T> {
+
+}
 
 impl<T: PartialOrd> PartialOrd for Vector2d<T> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {

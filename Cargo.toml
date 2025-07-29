@@ -5,3 +5,15 @@ edition = "2024"
 
 [dependencies]
 num-traits = "0.2.19"
+
+[workspace]
+resolver = "2"
+members = [
+    "main-vector2d",
+#    "libs-2d/src/modules/arc2d",
+    "libs-2d/src/modules/point2d",
+#    "libs-2d/src/modules/line2d",
+    "libs-2d/src/modules/vector2d",
+]
+
+
