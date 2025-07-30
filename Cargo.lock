@@ -19,6 +19,16 @@ checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 name = "libs-2d"
 version = "0.1.0"
 dependencies = [
+ "line2d",
+ "num-traits",
+ "point2d",
+ "vector2d",
+]
+
+[[package]]
+name = "line2d"
+version = "0.1.0"
+dependencies = [
  "num-traits",
  "point2d",
  "vector2d",

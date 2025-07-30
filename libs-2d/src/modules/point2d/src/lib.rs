@@ -212,6 +212,43 @@ where
         self.0.y += rhs.y();
     }
 }
+impl<T> std::ops::Add<Point2d<T>> for Point2d<T>
+where
+    T: Copy + Clone + Zero + std::ops::Mul + PartialOrd + std::ops::Add<Output = T>,
+{
+    type Output = Point2d<T>;
+    fn add(self, rhs: Point2d<T>) -> Self::Output {
+        Point2d(Vector2d::new(self.x() + rhs.x(), self.y() + rhs.y()))
+    }
+}
+impl<T> std::ops::Sub<Point2d<T>> for Point2d<T>
+where
+    T: Copy + Clone + Zero + std::ops::Mul + PartialOrd + std::ops::Sub<Output = T>,
+{
+    type Output = Point2d<T>;
+    fn sub(self, rhs: Point2d<T>) -> Self::Output {
+        Point2d(Vector2d::new(self.x() - rhs.x(), self.y() - rhs.y()))
+    }
+}
+impl<T> std::ops::Mul<Point2d<T>> for Point2d<T>
+where
+    T: Copy + Clone + Zero + std::ops::Mul<Output = T> + PartialOrd,
+{
+    type Output = Point2d<T>;
+    fn mul(self, rhs: Point2d<T>) -> Self::Output {
+        Point2d(Vector2d::new(self.x() * rhs.x(), self.y() * rhs.y()))
+    }
+}
+impl<T> std::ops::Div<Point2d<T>> for Point2d<T>
+where
+    T: Copy + Clone + Zero + std::ops::Div<Output = T> + std::ops::Mul + PartialOrd,
+{
+    type Output = Point2d<T>;
+    fn div(self, rhs: Point2d<T>) -> Self::Output {
+        Point2d(Vector2d::new(self.x() / rhs.x(), self.y() / rhs.y()))
+    }
+}
+
 
 impl<T> Neg for Point2d<T>
 where
@@ -245,6 +282,21 @@ impl<T: Hash + Copy + Clone + Zero + std::ops::Mul + PartialOrd> Hash for Point2
         self.y().hash(state);
     }
 }
+impl<T> Point2d<T>
+where
+    T: Copy + Clone + Zero + std::ops::Mul<Output = T> + 
+       std::ops::Sub<Output = T> + std::ops::Div<Output = T> + 
+       std::ops::Add<Output = T> + PartialOrd
+{
+    pub fn add_scalar(&self, scalar: T) -> Self {
+        Point2d::new(self.x() + scalar, self.y() + scalar)
+    }
+    
+    pub fn add_scalar_mut(&mut self, scalar: T) {
+        self.0.x = self.x() + scalar;
+        self.0.y = self.y() + scalar;
+    }
+}
 
 // Example: Add two Point2d instances to get a new Point2d
 pub fn add(left: u64, right: u64) -> u64 {
@@ -269,7 +321,7 @@ mod tests {
         let vector = Vector2d::new(3, 4);
         let result = point + vector;
         assert_eq!(result.x(), 4);
-        assert_eq!(result.y(), 6);
+        assert_eqЖенско(result.y(), 6);
     }
 
     #[test]

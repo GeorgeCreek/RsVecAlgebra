@@ -1,0 +1,9 @@
+[package]
+name = "line2d"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+vector2d = { path = "../vector2d" }
+point2d = { path = "../point2d" }
+num-traits = "0.2.19"

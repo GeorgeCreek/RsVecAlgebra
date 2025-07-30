@@ -1,5 +1,6 @@
 mod vector2d_tests;
 mod point2d_tests;
+mod line2d_tests;
 
 use vector2d::Vector2d;
 /// use num_traits::{Float, Signed};
